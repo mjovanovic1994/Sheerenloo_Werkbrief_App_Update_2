@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial; }
+        table { width:100%; border-collapse: collapse; }
+        th, td { border:1px solid #ccc; padding:5px; }
+    </style>
+</head>
+<body>
+
+<h2>Werkbrief</h2>
+
+<h3>Meta</h3>
+<ul>
+{% for k,v in werkbrief.meta.items() %}
+<li><b>{{ k }}</b>: {{ v }}</li>
+{% endfor %}
+</ul>
+
+<h3>Producten</h3>
+<table>
+<tr>
+<th>Naam</th><th>Aantal</th>
+</tr>
+{% for i in werkbrief.items %}
+<tr>
+<td>{{ i.naam }}</td>
+<td>{{ i.aantal }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Totaal: € {{ werkbrief.totaal_prijs }}</h3>
+
+</body>
+</html>

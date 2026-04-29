@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Werkbrieven{% endblock %}
+
+{% block content %}
+<h2>Werkbrieven</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Datum</th>
+            <th>Naam opdracht</th>
+            <th>Acties</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for wb in werkbrieven %}
+        <tr>
+            <td>{{ wb.id }}</td>
+            <td>{{ wb.datum }}</td>
+            <td>{{ wb.meta.naam_opdracht }}</td>
+            <td class="d-flex gap-2">
+
+    <!-- OPEN -->
+    <a href="{{ url_for('werkbrief_detail', wb_id=wb.id) }}"
+       class="btn btn-sm btn-primary">
+        Open
+    </a>
+
+    <!-- VERWIJDER -->
+    <form method="POST"
+      action="{{ url_for('delete_werkbrief', wb_id=wb.id) }}"
+      onsubmit="return confirm('Weet je zeker dat je deze werkbrief wilt verwijderen?');">
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <button type="submit" class="btn btn-sm btn-danger">
+        Verwijder
+    </button>
+</form>
+
+</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

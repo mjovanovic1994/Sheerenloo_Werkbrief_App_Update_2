@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Meta Gegevens{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">Meta Gegevens</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form method="POST">
+            {{ form.csrf_token }}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.naam_opdracht.label(class="form-label") }}
+                    {{ form.naam_opdracht(class="form-control") }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form.budgethouder.label(class="form-label") }}
+                    {{ form.budgethouder(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.wat_opdracht.label(class="form-label") }}
+                {{ form.wat_opdracht(class="form-control") }}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.datum_binnenkomst.label(class="form-label") }}
+                    {{ form.datum_binnenkomst(class="form-control") }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form.deadline.label(class="form-label") }}
+                    {{ form.deadline(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.locatie.label(class="form-label") }}
+                {{ form.locatie(class="form-control") }}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.opdrachtnummer.label(class="form-label") }}
+                    {{ form.opdrachtnummer(class="form-control") }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    {{ form.kostenplaats.label(class="form-label") }}
+                    {{ form.kostenplaats(class="form-control") }}
+                </div>
+            </div>
+
+            <h5 class="mt-4">Contactgegevens</h5>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    {{ form.telefoonnummer.label(class="form-label") }}
+                    {{ form.telefoonnummer(class="form-control") }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    {{ form.contactpersoon.label(class="form-label") }}
+                    {{ form.contactpersoon(class="form-control") }}
+                </div>
+            </div>
+            <div class="mb-3">
+    {{ form.levering.label(class="form-label") }}
+    {{ form.levering(class="form-select") }}
+</div>
+
+<div class="mb-3">
+    {{ form.adres.label(class="form-label") }}
+    {{ form.adres(class="form-control") }}
+</div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Opslaan & Volgende
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

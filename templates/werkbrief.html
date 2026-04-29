@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Werkbrief - Werkbrief App{% endblock %}
+
+{% block content %}
+<h2>Werkbrief</h2>
+
+<h4>Opdrachtinformatie</h4>
+<table class="table table-bordered">
+    <tbody>
+        {% for key, value in meta.items() %}
+        <tr>
+            <th>{{ key.replace('_', ' ')|capitalize }}</th>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h4>Producten</h4>
+<table class="table table-striped table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Naam</th>
+            <th>Formaat</th>
+            <th>Gram</th>
+            <th>Zijde</th>
+            <th>Aantal</th>
+            <th>Bewerking</th>
+            <th>Prijs per stuk (€)</th>
+            <th>Prijs totaal (€)</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.naam }}</td>
+            <td>{{ item.formaat }}</td>
+            <td>{{ item.gram }}</td>
+            <td>{{ item.zijde }}</td>
+            <td>{{ item.aantal }}</td>
+            <td>{{ item.bewerking }}</td>
+            <td>{{ "%.2f"|format(item.prijs_per_stuk) }}</td>
+            <td>{{ "%.2f"|format(item.prijs) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <th colspan="7" class="text-end">Totaal</th>
+            <th>{{ "%.2f"|format(totaal_prijs) }}</th>
+        </tr>
+    </tfoot>
+</table>
+
+<a href="{{ url_for('producten') }}" class="btn btn-secondary">Terug naar producten</a>
+{% endblock %}

@@ -1,0 +1,271 @@
+[
+{
+    "id": 1,
+    "categorie_id": 5,
+    "naam": "Postzegels plakken",
+    "prijs": 0.01
+  },
+  {
+    "id": 2,
+    "categorie_id": 5,
+    "naam": "Rapen",
+    "prijs": 0.02
+  },
+  {
+    "id": 3,
+    "categorie_id": 5,
+    "naam": "Vouwen",
+    "prijs": 0.01
+  },
+  {
+    "id": 4,
+    "categorie_id": 5,
+    "naam": "Nieten (per nietje)",
+    "prijs": 0.02
+  },
+  {
+    "id": 5,
+    "categorie_id": 5,
+    "naam": "Ontwerp",
+    "prijs": 25
+  },
+  {
+    "id": 6,
+    "categorie_id": 6,
+    "naam": "Uitstroom medewerkers",
+    "prijs": 0.5
+  },
+  {
+    "id": 7,
+    "categorie_id": 6,
+    "naam": "Online uitnodigingen",
+    "prijs": 25
+  }
+[
+  {
+    "id": 8,
+    "oplage_range": "001-200",
+    "formaat": "A4 enkelzijdig",
+    "prijs": 0.2
+  },
+  {
+    "id": 9,
+    "oplage_range": "001-200",
+    "formaat": "A4 dubbelzijdig",
+    "prijs": 0.4
+  }
+]
+{
+    "id": 10,
+    "categorie_id": 4,
+    "formaat": "A5",
+    "prijs": 1
+  },
+  {
+    "id": 11,
+    "categorie_id": 4,
+    "formaat": "A4",
+    "prijs": 1.5
+  },
+  {
+    "id": 12,
+    "categorie_id": 4,
+    "formaat": "A3",
+    "prijs": 2.5
+  }
+  {
+    "id": 127,
+    "formaat": "A4",
+    "gram": 80,
+    "zijde": "Enkelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.06
+  },
+  {
+    "id": 128,
+    "formaat": "A4",
+    "gram": 80,
+    "zijde": "Dubbelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.09
+  },
+  {
+    "id": 129,
+    "formaat": "A4",
+    "gram": 120,
+    "zijde": "Enkelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.1
+  },
+  {
+    "id": 130,
+    "formaat": "A4",
+    "gram": 120,
+    "zijde": "Dubbelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.15
+  },
+  {
+    "id": 131,
+    "formaat": "A3",
+    "gram": 80,
+    "zijde": "Enkelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.1
+  },
+  {
+    "id": 132,
+    "formaat": "A3",
+    "gram": 80,
+    "zijde": "Dubbelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.16
+  },
+  {
+    "id": 133,
+    "formaat": "A3",
+    "gram": 120,
+    "zijde": "Enkelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.2
+  },
+  {
+    "id": 134,
+    "formaat": "A3",
+    "gram": 120,
+    "zijde": "Dubbelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.3
+  },
+  {
+    "id": 135,
+    "formaat": "A6",
+    "gram": 80,
+    "zijde": "Enkelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.03
+  },
+  {
+    "id": 136,
+    "formaat": "A6",
+    "gram": 80,
+    "zijde": "Dubbelzijdig",
+    "type_print": "Zwart/Wit",
+    "prijs": 0.05
+  }
+  {
+    "id": 13,
+    "categorie_id": 1,
+    "formaat": "A4",
+    "gram": 80,
+    "zijde": "Enkelzijdig",
+    "prijs": 0.06
+  },
+  {
+    "id": 14,
+    "categorie_id": 1,
+    "formaat": "A4",
+    "gram": 80,
+    "zijde": "Dubbelzijdig",
+    "prijs": 0.09
+  },
+  {
+    "id": 15,
+    "categorie_id": 1,
+    "formaat": "A4",
+    "gram": 120,
+    "zijde": "Enkelzijdig",
+    "prijs": 0.1
+  },
+  {
+    "id": 16,
+    "categorie_id": 1,
+    "formaat": "A4",
+    "gram": 120,
+    "zijde": "Dubbelzijdig",
+    "prijs": 0.15
+  },
+  {
+    "id": 17,
+    "categorie_id": 1,
+    "formaat": "A3",
+    "gram": 80,
+    "zijde": "Enkelzijdig",
+    "prijs": 0.1
+  },
+  {
+    "id": 18,
+    "categorie_id": 1,
+    "formaat": "A3",
+    "gram": 80,
+    "zijde": "Dubbelzijdig",
+    "prijs": 0.16
+  },
+  {
+    "id": 19,
+    "categorie_id": 2,
+    "formaat": "A4",
+    "gram": 80,
+    "zijde": "Enkelzijdig",
+    "prijs": 0.23
+  },
+  {
+    "id": 20,
+    "categorie_id": 2,
+    "formaat": "A4",
+    "gram": 80,
+    "zijde": "Dubbelzijdig",
+    "prijs": 0.33
+  },
+  {
+    "id": 21,
+    "categorie_id": 2,
+    "formaat": "A4",
+    "gram": 120,
+    "zijde": "Enkelzijdig",
+    "prijs": 0.25
+  },
+  {
+    "id": 22,
+    "categorie_id": 2,
+    "formaat": "A4",
+    "gram": 120,
+    "zijde": "Dubbelzijdig",
+    "prijs": 0.35
+  },
+{
+    "id": 23,
+    "categorie_id": 9,
+    "naam": "250 gram",
+    "formaat": "55x85mm",
+    "prijs_per_stuk": 0.09,
+    "prijs_50": 3.5,
+    "prijs_100": 6.4,
+    "prijs": null
+  },
+  {
+    "id": 1,
+    "categorie_id": 7,
+    "naam": "10mm",
+    "prijs": 1
+  },
+  {
+    "id": 2,
+    "categorie_id": 7,
+    "naam": "14mm",
+    "prijs": 1.5
+  },
+  {
+    "id": 3,
+    "categorie_id": 8,
+    "naam": "Vellen (8 stuks per vel)",
+    "prijs": 0.45
+  },
+  {
+    "id": 4,
+    "categorie_id": 8,
+    "naam": "Vellen (24 stuks per vel)",
+    "prijs": 0.87
+  }
+
+]

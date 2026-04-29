@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Producten{% endblock %}
+
+{% block content %}
+
+<h2>Producten</h2>
+
+<form method="POST">
+    {{ form.csrf_token }}
+
+    <div id="producten-container">
+
+        {% for p in form.producten %}
+
+        <div class="row mb-3 product-entry">
+
+            <!-- CATEGORIE -->
+            <div class="col-md-2">
+                {{ p.naam.label }}
+                {{ p.naam(class="form-select") }}
+            </div>
+
+            <!-- FORMAAT -->
+            <div class="col-md-1">
+                {{ p.formaat.label }}
+                {{ p.formaat(class="form-select") }}
+            </div>
+
+            <!-- GRAM -->
+            <div class="col-md-1">
+                {{ p.gram.label }}
+                {{ p.gram(class="form-select") }}
+            </div>
+
+            <!-- ZIJDE -->
+            <div class="col-md-1">
+                {{ p.zijde.label }}
+                {{ p.zijde(class="form-select") }}
+            </div>
+
+            <!-- AANTAL -->
+            <div class="col-md-1">
+                {{ p.aantal.label }}
+                {{ p.aantal(class="form-control") }}
+            </div>
+
+            <!-- SUBCATEGORIE -->
+            <div class="col-md-2">
+                {{ p.subcategorie.label }}
+                {{ p.subcategorie(class="form-select") }}
+            </div>
+
+            <!-- BEWERKING -->
+            <div class="col-md-2">
+                {{ p.bewerking.label }}
+                {{ p.bewerking(class="form-select") }}
+            </div>
+
+            <!-- VERWIJDEREN -->
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" name="remove_product"
+                        value="{{ loop.index0 }}"
+                        class="btn btn-danger btn-sm">
+                    Verwijderen
+                </button>
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" name="add_product" class="btn btn-primary" value="add">Product toevoegen</button>
+        <button type="submit" name="save" class="btn btn-success" value="save">Opslaan & Werkbrief</button>
+    </div>
+
+</form>
+
+{% endblock %}

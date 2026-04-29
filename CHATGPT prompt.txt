@@ -1,0 +1,64 @@
+printen zwart/wit A4 80 gram enkelzijdig €0,06, dubbelzijdig €0,09. printen zwart/wit A4 120 gram enkelzijdig €0,10, dubbelzijdig €0,15. printen zwart/wit A4 160 gram enkelzijdig €0,15, dubbelzijdig €0,18. printen zwart/wit A4 200 gram enkelzijdig €0,20, dubbelzijdig €0,25. printen zwart/wit A4 250 gram enkelzijdig €0,27, dubbelzijdig €0,32. printen zwart/wit A3 80 gram enkelzijdig €0,10, dubbelzijdig €0,16. printen zwart/wit A3 120 gram enkelzijdig €0,20, dubbelzijdig €0,30. printen zwart/wit A3 200 gram enkelzijdig €0,33, dubbelzijdig €0,45. printen zwart/wit SRA3 120 gram enkelzijdig €0,22, dubbelzijdig €0,35. printen zwart/wit SRA3 200 gram enkelzijdig €0,33, dubbelzijdig €0,45. printen zwart/wit SRA3 300 gram enkelzijdig €0,40, dubbelzijdig €0,55. printen kleur A4 80 gram enkelzijdig €0,23, dubbelzijdig €0,33. printen kleur A4 120 gram enkelzijdig €0,25, dubbelzijdig €0,35. printen kleur A4 160 gram enkelzijdig €0,27, dubbelzijdig €0,40. printen kleur A4 200 gram enkelzijdig €0,31, dubbelzijdig €0,45. printen kleur A4 250 gram enkelzijdig €0,37, dubbelzijdig €0,48. printen kleur A4 300 gram handmatige invoer enkelzijdig €0,40, dubbelzijdig €0,52. printen kleur A3 80 gram enkelzijdig €0,40, dubbelzijdig €0,55. printen kleur A3 120 gram enkelzijdig €0,64, dubbelzijdig €0,78. printen kleur A3 200 gram enkelzijdig €0,72, dubbelzijdig €0,90. printen kleur SRA3 80 gram enkelzijdig €0,44, dubbelzijdig €0,95. printen kleur SRA3 120 gram enkelzijdig €1,20, dubbelzijdig €1,55. printen kleur SRA3 200 gram enkelzijdig €1,29, dubbelzijdig €2,00. kraftpapier 300 gram handmatige invoer enkelzijdig €0,45. dubbelzijdig €0,52 lamineren inclusief papier 300 gram A5 €1,00 lamineren inclusief papier 300 gram A4 €1,50. lamineren inclusief papier 300 gram A3 €2,50. handelingen/bijkomende kosten etikketten plakken, enveloppen sluiten enz. €0,01. handelingen/bijkomende kosten overzetten Excel/Word voor etiketten €5,00. handelingen/bijkomende kosten postzegels plakken €0,01. handelingen/bijkomende kosten rapen €0,02. handelingen/bijkomende kosten vouwen €0,01. handelingen/bijkomende kosten vouwen per boekje €0,02 handelingen/bijkomende kosten nieten per nietje €0,01. handelingen/bijkomende kosten snijden per handeling machine €0,01. 
+
+handelingen/bijkomende kosten perforeren €0,01.
+handelingen/bijkomende kosten klaarzetten in publisher/canva etc. €2,50.
+handelingen/bijkomende kosten bestanden overzetten €5,00.
+handelingen/bijkomende kosten starttarief €1,00.
+handelingen/bijkomende kosten ontwerp €25,00.
+handelingen/bijkomende kosten rillen 50 vellen €0,01
+handelingen/bijkomende kosten rillen instellen €0,02
+
+vaste kosten uitstroom medewerkers per persoon €0,50.
+vaste kosten vrijwilligers verjaardagskaarten €1,81.
+vaste kosten hartennieuws per krant €1,82.
+vaste kosten online uitnodigingen €25,00.
+vaste kosten etiketten printen zonder papier €0,05.
+vaste kosten posters A3 kleur + lamineren per persoon €1,90.
+
+inbinden wire-o binden 10mm €1,00.
+inbinden wire-o binden 14mm €1,50.
+inbinden wire-o binden transparante bindomslag per vel €0,10.
+
+etiket stickers vellen 8 stuks per vel €0,45.
+etiket stickers vellen 24 stuks per vel €0,87.
+
+visitekaartjes 250 gram 55x85mm €0,09.
+visitekaartjes per 50 €3,50.
+visitekaartjes per 100 €6,40.
+visitekaartjes 160 gram A5 €0,30.
+visitekaartjes A5 dubbelgevouwen tot A6 €1,00.
+visitekaartjes A5 open €1,50.
+visitekaartjes A6 enkel binnen SHL €0,30.
+visitekaartjes nieuwe medewerkers inclusief postzegel €1,25.
+visitekaartjes kerstkaarten €1,50.
+visitekaartjes bloemen, kaarsen etc. ongeveer 5x7 €0,05.
+
+flyers brandportaal 250gram mat oplage 001-200 A4 enkelzijdig €0,20, dubbelzijdig €0,40.
+flyers brandportaal 250gram mat oplage 001-200 A5 enkelzijdig €0,12, dubbelzijdig €0,25.
+flyers brandportaal 250gram mat oplage 201-300 A4 enkelzijdig €0,18, dubbelzijdig €0,35.
+flyers brandportaal 250gram mat oplage 201-300 A5 enkelzijdig €0,11, dubbelzijdig €0,23.
+flyers brandportaal 250gram mat oplage 301-500 A4 enkelzijdig €0,15, dubbelzijdig €0,30.
+flyers brandportaal 250gram mat oplage 301-500 A5 enkelzijdig €0,10, dubbelzijdig €0,20.
+
+gekleurd papier gekleurde A4 blaadjes 120 gram enkelzijdig €0,20, dubbelzijdig €0,12.
+gekleurd papier gekleurde A4 blaadjes 230 gram enkelzijdig €0,14, dubbelzijdig €0,16.
+
+notitie/kalenderboekje per 100 €0,30.
+notitie/kalenderboekje kartonnen achterkant €0,10.
+notitie/kalenderboekje stukje rondje eruit halen €0,15.
+notitie/kalenderboekje kalender + ophangoog per stuk €6,00.
+
+communicatie 300 gram kleur dubbelzijdig A6 €0,24.
+
+enveloppen a6 wit per stuk €0,33.
+enveloppen Roma per 100 €0,29.
+
+postservice doosje vouwen €0,05.
+postservice gadget erin €0,02.
+postservice mailing €0,05.
+postservice vouwen €0,02.
+postservice extra flyer prijs per klant €0,01.
+postservice postzegels nr.1 per stuk €1,31.
+postservice enveloppen A5 uit per stuk €0,05.
+
+

@@ -1,0 +1,64 @@
+de dropdown categorie is printen zwart/wit, het formaat is A4, het aantal gram is 80 gram, de zijde is enkelzijdig en de prijs is €0,06, en de prijs is €0,09 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is A4, het aantal gram is 120 gram , en de zijde is enkelzijdig en de prijs is €0,10, en de prijs is €0,15 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is A4, het aantal gram is 160 gram en de zijde is enkelzijdig en de prijs is €0,15, en de prijs is €0,18 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is A4, het aantal gram is 200 gram enkelzijdig en de prijs is €0,20, en de prijs is €0,25 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is A4, het aantal gram is 250 gram, en de zijde is enkelzijdig en de prijs is €0,27, en de prijs is €0,32 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is A3, het aantal gram is 80 gram enkelzijdig en de prijs is €0,10, en de prijs is dubbelzijdig €0,16. de dropdown categorie is printen zwart/ wit,het formaat is A3, het aantal gram is 120 gram, en de zijde is enkelzijdig en de prijs is €0,20, en de prijs is €0,30 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is A3, het aantal gram is 200 gram , en de zijde is enkelzijdig en de prijs is €0,33, en de prijs is €0,45 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is SRA3, het aantal gram is 120 gram enkelzijdig en de prijs is  €0,22, en de prijs is dubbelzijdig €0,35. de dropdown categorie is printen zwart/ wit,het formaat is SRA3, het aantal gram is 200 gram en de zijde enkelzijdig en de prijs is €0,33, en de prijs is €0,45 en de zijde is dubbelzijdig. de dropdown categorie is printen zwart/ wit,het formaat is SRA3, het aantal gram is 300 gram en de zijde is enkelzijdig en de prijs is €0,40, en de prijs is  €0,55 en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A4, het aantal gram is 80 gram en de zijde is enkelzijdig en de prijs is €0,23, en de prijs is €0,33 en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A4, het aantal gram is 120 gram en de zijde is enkelzijdig en de prijs is €0,25, en de prijs is €0,35 en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A4, het aantal gram is 160 gram en de zijde is enkelzijdig en de prijs is  €0,27, en de prijs is €0,40  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A4, het aantal gram is 200 gram en de zijde is enkelzijdig en de prijs is €0,31, en de prijs is €0,45  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A4, het aantal gram is 250 gram en de zijde is enkelzijdig en de prijs is €0,37, en de prijs is €0,48  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A4, het aantal gram is 300 gram handmatige invoer en de zijde is enkelzijdig en de prijs is €0,40, en de prijs is €0,52  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A3, het aantal gram is 80 gram en de zijde is enkelzijdig en de prijs is €0,40, en de prijs is €0,55  en de zijde is dubbelzijdig.  de dropdown categorie is printen kleur, het formaat is A3, het aantal gram is 120 gram en de zijde is enkelzijdig en de prijs is €0,64, en de prijs is €0,78  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is A3, het aantal gram is 200 gram en de zijde is enkelzijdig en de prijs is €0,72, en de prijs is €0,90 en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is SRA3, het aantal gram is 80 gram en de zijde is enkelzijdig en de prijs is €0,44, en de prijs €0,95  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is SRA3, het aantal gram is 120 gram en de zijde is enkelzijdig en de prijs is €1,20, en de prijs is €1,55  en de zijde is dubbelzijdig. de dropdown categorie is printen kleur, het formaat is SRA3, het aantal gram is 200 gram en de zijde is enkelzijdig en de prijs is €1,29, en de prijs is €2,00  en de zijde is dubbelzijdig. de dropdown categorie is kraftpapier, het aantal gram is 300 gram handmatige invoer en de zijde is enkelzijdig en de prijs is €0,45, en de prijs is €0,52  en de zijde is dubbelzijdig. de dropdown categorie is lamineren inclusief papier, het aantal gram is 300 gram, het formaat is A5 en de prijs is €1,00. de dropdown categorie is lamineren inclusief papier, het aantal gram is 300 gram, het formaat is A4 en de prijs is €1,50, de dropdown categorie is lamineren inclusief papier, het aantal gram is 300 gram, het formaat is A3 en de prijs is €2,50. de dropdown categorie is handelingen/bijkomende kosten etikketten plakken, enveloppen sluiten enz.  en de prijs is €0,01. de dropdown categorie is handelingen/bijkomende kosten overzetten Excel/Word voor etiketten en de prijs is €5,00. de dropdown categorie is handelingen/bijkomende kosten postzegels plakken en de prijs is €0,01. de dropdown categorie is handelingen/bijkomende kosten, de bewerking is rapen en de prijs is €0,02. de dropdown categorie is handelingen/bijkomende kosten, de bewerking is vouwen en de prijs is €0,01. de dropdown categorie is handelingen/bijkomende kosten, de bewerking is vouwen per boekje en de prijs is €0,02. de dropdown categorie is handelingen/bijkomende kosten, de bewerking is nieten per nietje en de prijs is €0,01. de dropdown categorie is handelingen/bijkomende kosten, de bewerking is snijden per handeling machine en de prijs is €0,01.  
+
+de dropdown categorie is handelingen/bijkomende kosten, de bewerking is perforeren en de prijs is €0,01. 
+de dropdown categorie is handelingen/bijkomende kosten klaarzetten in publisher/canva etc. en de prijs is €2,50. 
+de dropdown categorie is handelingen/bijkomende kosten bestanden overzetten en de prijs is €5,00. 
+de dropdown categorie is handelingen/bijkomende kosten starttarief en de prijs is €1,00. 
+de dropdown categorie is handelingen/bijkomende kosten ontwerp en de prijs is €25,00. 
+de dropdown categorie is handelingen/bijkomende kosten, de bewerking is rillen 50 vellen en de prijs is €0,01 
+de dropdown categorie is handelingen/bijkomende kosten, de bewerking is rillen instellen en de prijs is €0,02 
+
+de dropdown categorie is vaste kosten uitstroom medewerkers per persoon en de prijs is €0,50. 
+de dropdown categorie is vaste kosten vrijwilligers verjaardagskaarten en de prijs is €1,81. 
+de dropdown categorie is vaste kosten hartennieuws per krant en de prijs is €1,82. 
+de dropdown categorie is vaste kosten online uitnodigingen en de prijs is €25,00. 
+de dropdown categorie is vaste kosten etiketten printen zonder papier en de prijs is €0,05. 
+de dropdown categorie is vaste kosten posters A3 kleur + lamineren per persoon en de prijs is €1,90. 
+
+de dropdown categorie is inbinden wire-o binden 10mm en de prijs is €1,00. 
+de dropdown categorie is inbinden wire-o binden 14mm en de prijs is €1,50. 
+de dropdown categorie is inbinden wire-o binden transparante bindomslag per vel en de prijs is €0,10. 
+
+de dropdown categorie is etiket stickers vellen 8 stuks per vel en de prijs is €0,45. 
+de dropdown categorie is etiket stickers vellen 24 stuks per vel en de prijs is  €0,87. 
+
+de dropdown categorie is visitekaartjes, het aantal gram is 250 gram 55x85mm en de prijs is €0,09. 
+de dropdown categorie is visitekaartjes per 50 en de prijs is €3,50. 
+de dropdown categorie is visitekaartjes per 100 en de prijs is €6,40. 
+de dropdown categorie is visitekaartjes, het aantal gram is 160 gram, het formaat is A5 en de prijs is €0,30. 
+de dropdown categorie is visitekaartjes, het formaat is A5 dubbelgevouwen tot A6 en de prijs is €1,00. 
+de dropdown categorie is visitekaartjes, het formaat is A5 open en de prijs is €1,50. 
+de dropdown categorie is visitekaartjes, het formaat is A6 enkel binnen SHL en de prijs is €0,30. 
+de dropdown categorie is visitekaartjes nieuwe medewerkers inclusief postzegel en de prijs is €1,25. 
+de dropdown categorie is visitekaartjes kerstkaarten en de prijs is €1,50. 
+de dropdown categorie is visitekaartjes bloemen, kaarsen etc. ongeveer 5x7 en de prijs is €0,05. 
+
+de dropdown categorie is flyers brandportaal, het aantal gram is 250gram mat oplage 001-200, het formaat is A4 enkelzijdig en de prijs is €0,20, de dropdown categorie is, en de zijde is dubbelzijdig en de prijs is €0,40. 
+de dropdown categorie is flyers brandportaal, het aantal gram is 250gram mat oplage 001-200, het formaat is A5 enkelzijdig en de prijs is €0,12, en de prijs is, en de zijde is dubbelzijdig €0,25. 
+de dropdown categorie is flyers brandportaal, het aantal gram is 250gram mat oplage 201-300, het formaat is A4 enkelzijdig en de prijs is €0,18, en de zijde is dubbelzijdig en de prijs €0,35. 
+de dropdown categorie is flyers brandportaal, het aantal gram is 250gram mat oplage 201-300, het formaat is A5 enkelzijdig en de prijs is €0,11, de zijde is dubbelzijdig en de prijs is €0,23. 
+de dropdown categorie is flyers brandportaal 250gram mat oplage 301-500, het formaat is A4 enkelzijdig en de prijs is €0,15, de zijde is dubbelzijdig en de prijs is €0,30. 
+de dropdown categorie is flyers brandportaal 250gram mat oplage 301-500, het formaat is A5 enkelzijdig en de prijs is €0,10, de zijde is dubbelzijdig en de prijs is €0,20. 
+
+de dropdown categorie is gekleurd papier gekleurde, het formaat is A4 blaadjes 120 gram enkelzijdig en de prijs is €0,20, de zijde is dubbelzijdig en de prijs is €0,12. 
+de dropdown categorie is gekleurd papier gekleurde, het formaat is A4 blaadjes 230 gram enkelzijdig en de prijs is €0,14, de zijde is dubbelzijdig en de prijs is €0,16. 
+
+de dropdown categorie is notitie/kalenderboekje per 100 en de prijs is €0,30. 
+de dropdown categorie is notitie/kalenderboekje kartonnen achterkant en de prijs is €0,10. 
+de dropdown categorie is notitie/kalenderboekje stukje rondje eruit halen en de prijs is €0,15. 
+de dropwdown categorie is notitie/kalenderboekje kalender + ophangoog per stuk en de prijs is €6,00. 
+
+de dropdown categorie is communicatie 300 gram kleur en de zijde is dubbelzijdig, het formaat is A6 en de prijs is €0,24. 
+
+de dropdown categorie is enveloppen, het formaat is a6 wit per stuk en de prijs is €0,33. 
+de dropdown categorie is enveloppen Roma per 100 en de prijs is €0,29. 
+
+de dropdown categorie is postservice doosje vouwen en de prijs is €0,05. 
+de dropdown categorie is postservice gadget erin en de prijs is €0,02. 
+de dropdown categorie is postservice mailing en de prijs is €0,05. 
+de dropdown categorie is postservice, de bewerking is vouwen en de prijs is €0,02. 
+de dropdown categorie is postservice extra flyer prijs per klant en de prijs is €0,01. 
+de dropdown categorie is postservice postzegels nr.1 per stuk en de prijs is €1,31. 
+de dropdown categorie is postservice enveloppen, het formaat is A5 uit per stuk en de prijs is €0,05. 
+
+
