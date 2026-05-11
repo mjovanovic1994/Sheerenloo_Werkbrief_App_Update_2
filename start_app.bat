@@ -1,8 +1,8 @@
 @echo off
-cd /d %~dp0
+cd /d "C:\Users\ICT&MEDIA\Documents\Marko\Python\Sheerenloo\App\project"
 
-start http://127.0.0.1:5050
+call venv\Scripts\activate.bat
 
-python app.py
+python main.py
 
 pause

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, request, flash
+from flask import Flask, render_template, redirect, url_for, session, request, flash, make_response
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, IntegerField, FieldList, FormField
 from wtforms.validators import DataRequired
@@ -7,27 +7,35 @@ from functools import wraps
 from dotenv import load_dotenv
 from datetime import datetime
 import pdfkit
-from flask import make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 import logging
 import secrets
-import gunicorn
+from wtforms.validators import Optional
 
-
-app = Flask(__name__)
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-load_dotenv(os.path.join(BASE_DIR, ".env"))
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
-if not app.config['SECRET_KEY']:
-    raise RuntimeError("SECRET_KEY is missing")
+dotenv_path = os.path.join(BASE_DIR, ".env")
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_PATH = os.path.join(BASE_DIR, ".env")
+
+load_dotenv(ENV_PATH)
+
+app = Flask(__name__)
+secret = os.environ.get("SECRET_KEY")
+
+if not secret:
+    raise RuntimeError("SECRET_KEY is missing (.env niet geladen of ontbreekt)")
+
+app.config['SECRET_KEY'] = secret
+    
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
     "DATABASE_URL",
     "sqlite:///app.db"
 )
+
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -42,6 +50,21 @@ class Werkbrief(db.Model):
     items = db.Column(db.JSON)
 
 logging.basicConfig(level=logging.INFO)
+
+KOSTENPLAATSEN = [
+    "20867", "20393", "23215", "20863", "20852",
+    "20856", "20855", "23820", "20854", "23780",
+    "20788", "20727", "22322", "20864", "20823",
+    "21759", "20754", "5381", "20721", "23267",
+    "20570", "20828", "23859", "22726", "49240",
+    "20839", "20837", "23814", "90205", "10545"
+]
+
+PRIJSAANPASSING = {
+    # (budgethouder, locatie, kostenplaats): multiplier
+    # voorbeeld (later uitbreidbaar)
+    ("Jenneke van Dam", "Proosdij", "20867"): 1.0,
+}
 # ---------------- PRIJZEN ----------------
 PRIJZEN = {
 
@@ -178,6 +201,7 @@ PRIJZEN = {
 ("Notitieboekje","Rondje uitsnijden","",""): 0.15,
 ("Notitieboekje","Kalender + oog","",""): 6.00,
 
+
 # ---------------- ENVELOPPEN ----------------
 ("Enveloppen","A6","",""): 0.33,
 ("Enveloppen","Roma 100","",""): 0.29,
@@ -204,13 +228,120 @@ SUBCATEGORIEEN = {
         "Poster A3 kleur gelamineerd"
     ]
 }
+
+BUDGETHOUDER_LOCATIES = {
+    "Jenneke van Dam": [
+        "Proosdij", "Het Hart", "Buitendienst", "Bakkerij Smul", "Rotonde",
+        "Makandra", "Voetbalwerkplaats", "Academie voor Zelfstandigheid",
+        "Jobcoach", "Vrijwillige inzet", "Theehuis de Roek", "Recreatie",
+        "Innovatie"
+    ],
+    "Marieke de Jong": [
+        "Rietkampen", "DAC. Rietkampen", "Wasserij", "Buitenland (Parkboerderij)"
+    ],
+    "Ellen Smulders": [
+        "Elsenhoek", "Molenweg 24"
+    ],
+    "Kristel van Ommeren": [
+        "Bureau VOOR", "Eekhoornstraat 9", "Hagedisstraat 7-11"
+    ],
+    "Hester de Graaf": [
+        "OR", "Duurzaamheid", "Communicatie", "Recruitment",
+        "Secretariaat Management", "Gelderland Midden"
+    ],
+    "Wilma Fontaine": [
+        "Wilma Fontaine", "Het Panorama"
+    ],
+    "Anneloes Welvering": [
+        "Hagedisstraat 8"
+    ],
+    "Buitenland Gelderland Midden": [
+        "Kasgroep"
+    ],
+    "Lucretia Visser": [
+        "Visitekaartjes"
+    ],
+    "Mieke Kruizinga": [
+        "Erasmusstate 81-83"
+    ],
+    "Corrie Ruttenberg": [
+        "EMB", "Onder 1 Dak"
+    ],
+    "Judith Wagenmaker": [
+        "Opleiding"
+    ],
+    "Elly Westerdijk": [
+        "Academie"
+    ]
+}
+
+BUDGETHOUDERS = {
+    "Jenneke van Dam": [
+        "20867", "20393", "23215", "20863", "20852",
+        "20856", "20855", "23820", "20854", "23780",
+        "20788", "20727", "22921"
+    ],
+
+    "Marieke de Jong": [
+        "20869", "20783", "22322"
+    ],
+
+    "Ellen Smulders": [
+        "20864", "20823"
+    ],
+
+    "Kristel van Ommeren": [
+        "21759", "20754", "5381"
+    ],
+
+    "Hester de Graaf": [
+        "23267", "20570"
+    ],
+
+    "Wilma Fontaine": [
+        "20828", "23859"
+    ],
+
+    "Anneloes Welvering": [
+        "22726"
+    ],
+
+    "Buitenland Gelderland Midden": [
+        "23222"
+    ],
+
+    "Lucretia Visser": [
+        "49240"
+    ],
+
+    "Mieke Kruizinga": [
+        "20839"
+    ],
+
+    "Corrie Ruttenberg": [
+        "20837", "23814"
+    ],
+
+    "Judith Wagenmaker": [
+        "90205"
+    ],
+
+    "Elly Westerdijk": [
+        "10545"
+    ]
+}
 # ---------------- FUNCTIES ----------------
 
 def save_werkbrief_db(data):
+    enriched_items = enrich_items(
+        data.get("items", []),
+        data.get("meta", {})
+    )
+
     wb = Werkbrief(
         datum=datetime.now().strftime("%Y-%m-%d %H:%M"),
         meta=data.get("meta", {}),
-        items=data.get("items", [])
+        items=enriched_items
     )
 
     db.session.add(wb)
@@ -244,27 +375,44 @@ def get_valid_values(field, current_filters):
 
     return sorted(values)
 
-def prijs_per_stuk(item):
-    key = (
-        item.get("naam"),
-        item.get("formaat",""),
-        item.get("gram",""),
-        item.get("zijde","")
-    )
+def prijs_per_stuk(item, meta=None):
+    naam = item.get("naam", "")
+    formaat = item.get("formaat", "")
+    gram = item.get("gram") or ""   # 👈 FIX
+    zijde = item.get("zijde", "")
+    sub = item.get("subcategorie", "")
 
-    prijs = PRIJZEN.get(key)
+    # 1. exacte match
+    prijs = PRIJZEN.get((naam, formaat, gram, zijde))
+    if prijs is not None:
+        base = prijs
+    else:
+        # 2. fallback zonder gram
+        prijs = PRIJZEN.get((naam, formaat, "", zijde))
+        if prijs is not None:
+            base = prijs
+        else:
+            # 3. subcategorie fallback
+            prijs = PRIJZEN.get((naam, sub, "", ""))
+            if prijs is not None:
+                base = prijs
+            else:
+                base = 0.0
 
-    # fallback → subcategorie
-    if prijs is None:
+    multiplier = 1.0
+
+    if base == 0:
+        print("❌ NO PRICE MATCH:", naam, formaat, gram, zijde, sub)
+
+    if meta:
         key = (
-            item.get("naam"),
-            item.get("subcategorie",""),
-            "",
-            ""
+            meta.get("budgethouder"),
+            meta.get("locatie"),
+            meta.get("kostenplaats")
         )
-        prijs = PRIJZEN.get(key, 0)
+        multiplier = PRIJSAANPASSING.get(key, 1.0)
 
-    return prijs
+    return base * multiplier
 
 def totaal_prijs(items):
     return sum(prijs_per_stuk(i) * int(i.get('aantal',1)) for i in items)
@@ -289,6 +437,42 @@ def get_subcategorieen(categorie):
         if key[0] == categorie and key[1]
     ))
 
+def bereken_items(items, meta=None):
+    enriched = enrich_items(items, meta)
+    totaal = sum(i["prijs"] for i in enriched)
+    return enriched, totaal
+
+def validate(self):
+    if not super().validate():
+        return False
+
+    # als print → gram verplicht
+    if self.naam.data in ["Print Zwart/Wit", "Print Kleur"]:
+        if not self.gram.data:
+            self.gram.errors.append("Gram is verplicht voor print")
+            return False
+
+    return True
+
+def enrich_items(items, meta=None):
+    """Voegt prijs_per_stuk en totaal toe aan items"""
+    resultaat = []
+
+    for item in items:
+        item_copy = dict(item)
+
+        aantal = max(1, int(item_copy.get("aantal") or 1))
+        prijs_stuk = prijs_per_stuk(item_copy, meta)
+        totaal = prijs_stuk * aantal
+
+        item_copy["aantal"] = aantal
+        item_copy["prijs_per_stuk"] = prijs_stuk
+        item_copy["prijs"] = totaal
+
+        resultaat.append(item_copy)
+
+    return resultaat
+
 # ---------------- FORMS ----------------
 class LoginForm(FlaskForm):
     username = StringField("Gebruikersnaam", validators=[DataRequired()])
@@ -297,18 +481,67 @@ class LoginForm(FlaskForm):
 
 class MetaForm(FlaskForm):
     naam_opdracht = StringField("Naam opdracht", validators=[DataRequired()])
-    budgethouder = StringField("Budgethouder", validators=[DataRequired()])
+    budgethouder = SelectField(
+    "Budgethouder",
+    choices=[("", "-- kies --")] + [
+        (naam, naam) for naam in BUDGETHOUDERS.keys()
+    ],
+    validators=[Optional()]
+)
+    kostenplaatsen = SelectField(
+    "Kostenplaats",
+    choices=[],
+    validators=[Optional()]
+    )
     wat_opdracht = TextAreaField("Wat is de opdracht", validators=[DataRequired()])
     datum_binnenkomst = StringField("Datum binnenkomst")
-    locatie = StringField("Locatie")
+    locatie = SelectField("Locatie", choices=[
+        ("","--kies--"),
+        ("Proosdij","Proosdij"),
+        ("Het Hart", "Het Hart"),
+        ("Buitendienst","Buitendienst"),
+        ("Bakkerij Smul","Bakkerij Smul"),
+        ("Rotonde","Rotonde"),
+        ("Makandra","Makdandra"),
+        ("Voetbalwerkplaats","Voetbalwerkplaats"),
+        ("Academie voor Zelfstandigheid", "Academie voor Zelfstandigheid"),
+        ("Jobcoach","Jobcoach"),
+    ("Vrijwillige inzet", "Vrijwillige inzet"),
+    ("Theehuis de Roek", "Theehuis de Roek"),
+    ("Recreatie","Recreatie"),
+    ("Innovatie","Innovatie"),
+    ("Rietkampen","Rietkampen"),
+    ("D.A.C. Rietkampen","D.A.C. Rietkampen"),
+    ("Wasserij","Wasserij"),
+    ("Buitenland (Parkboerderij)","Buitenland (Parkboerderij)"),
+    ("Elsenhoek","Elsenhoek"),
+    ("Molenweg 24","Molenweg 24"),
+    ("Burea VOOR","Bureau VOOR"),
+    ("Eekhoornstraat 9","Eekhoornstraat 9"),
+    ("Hagedisstraat 7-11","Hagedisstraat 7-11"),
+    ("OR","OR"),
+    ("Duurzaamheid","Duurzaamheid"),
+    ("Communicatie","Communicatie"),
+    ("Recruitement","Recruitement"),
+    ("Secretariaat Management","Secretariaat Management"),
+    ("Gelderland Midden","Gelderland Midden"),
+    ("Wilma Fontaine","Wilma Fontaine"),
+    ("Het Panorama","Het Panorama"),
+    ("Hagedisstraat 8","Hagedisstraat 8"),
+    ("Kasgroep", "Kasgroep"),
+    ("Visitekaartjes", "Visitekaartjes"),
+    ("Erasmusstate 81-83","Erasmusstate 81-83"),
+    ("EMB","EMB"),
+    ("Onder 1 Dak","Onder 1 Dak"),
+    ("Opleiding","Opleiding"),
+    ("Academie","Academie")
+    ],validators=[Optional()])
     deadline = StringField("Deadline")
     opdrachtnummer = StringField("Opdrachtnummer")
-    kostenplaats = StringField("Kostenplaats")
     telefoonnummer = StringField("Telefoonnummer")
     email = StringField("Email")
     contactpersoon = StringField("Contactpersoon")
-
-    # NIEUW 👇
+    
     levering = SelectField("Levering", choices=[
         ("", "-- kies --"),
         ("Ophalen", "Ophalen"),
@@ -454,9 +687,14 @@ class ProductForm(FlaskForm):
         ("Rillen", "Rillen")
     ])
 
+    
+
 class ProductListForm(FlaskForm):
     csrf_token = StringField()
     producten = FieldList(FormField(ProductForm), min_entries=1)
+
+class DeleteForm(FlaskForm):
+    submit = SubmitField("Verwijder")    
 
 # ---------------- ROUTES ----------------
 
@@ -474,8 +712,8 @@ def delete_werkbrief(wb_id):
 
     flash("Werkbrief verwijderd", "success")
     return redirect(url_for("werkbrieven"))
-@app.route("/werkbrief/<int:wb_id>/pdf")
 
+@app.route("/werkbrief/<int:wb_id>/pdf")
 @login_required
 def werkbrief_pdf(wb_id):
     wb = Werkbrief.query.get(wb_id)
@@ -484,28 +722,34 @@ def werkbrief_pdf(wb_id):
         flash("Werkbrief niet gevonden", "danger")
         return redirect(url_for("werkbrieven"))
 
+    items_met_prijs, totaal = bereken_items(wb.items, wb.meta)
+
+    print(wb.items[0])
+
     rendered = render_template(
         "werkbrief.html",
         meta=wb.meta,
-        items=wb.items,
-        totaal_prijs=0
+        items=items_met_prijs,
+        totaal_prijs=totaal
     )
 
     try:
         pdf = pdfkit.from_string(rendered, False)
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
-        response.headers["Content-Disposition"] = "inline; filename=werkbrief.pdf"
         return response
     except Exception:
-        # fallback als wkhtmltopdf niet werkt in productie
         return rendered
 
 @app.route("/werkbrieven")
 @login_required
 def werkbrieven():
     werkbrieven = Werkbrief.query.order_by(Werkbrief.id.desc()).all()
-    return render_template("werkbrieven.html", werkbrieven=werkbrieven)
+    form = DeleteForm()
+    for wb in werkbrieven:
+        wb.items, _ = bereken_items(wb.items, wb.meta)
+        print(wb.items[0])
+    return render_template("werkbrieven.html", werkbrieven=werkbrieven, form=form)
 
 @app.route("/werkbrief/<int:wb_id>")
 @login_required
@@ -516,20 +760,8 @@ def werkbrief_detail(wb_id):
         flash("Werkbrief niet gevonden", "danger")
         return redirect(url_for("werkbrieven"))
 
-    items_met_prijs = []
-
-    for item in wb.items:
-        item_copy = item.copy()
-
-        prijs_stuk = prijs_per_stuk(item)
-        aantal = max(1, int(item.get("aantal") or 1))
-
-        item_copy["prijs_per_stuk"] = prijs_stuk
-        item_copy["prijs"] = prijs_stuk * aantal
-
-        items_met_prijs.append(item_copy)
-
-    totaal = sum(i["prijs"] for i in items_met_prijs)
+    items_met_prijs, totaal = bereken_items(wb.items, wb.meta)
+    print(wb.items[0])
 
     return render_template(
         "werkbrief.html",
@@ -543,20 +775,26 @@ USERS = {
     "gebruiker": generate_password_hash("Geheim_456!")
 }
 
-@app.route("/login", methods=["GET","POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
+
     if form.validate_on_submit():
+
         if form.username.data in USERS and check_password_hash(
-    USERS[form.username.data],
-    form.password.data
-):
+            USERS[form.username.data],
+            form.password.data
+        ):
             session["logged_in"] = True
             session["username"] = form.username.data
             flash("Succesvol ingelogd!", "success")
+
             return redirect(url_for("meta"))
-        else:
-            flash("Ongeldige gebruikersnaam of wachtwoord.", "danger")
+
+        # ❗ BELANGRIJK: ook bij fout altijd redirect (PRG pattern)
+        flash("Ongeldige gebruikersnaam of wachtwoord.", "danger")
+        return redirect(url_for("login"))
+
     return render_template("login.html", form=form)
 
 @app.route("/logout")
@@ -565,15 +803,77 @@ def logout():
     flash("Succesvol uitgelogd.", "success")
     return redirect(url_for("login"))
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def meta():
+
     data = get_data()
-    form = MetaForm(obj=data.get("meta", {}))
-    if form.validate_on_submit():
-        data["meta"].update(form.data)
-        session.modified = True
-        return redirect(url_for("producten"))
+    form = MetaForm()
+    meta = data.get("meta", {})
+
+    # -------------------------
+    # budgethouder bepalen
+    # -------------------------
+    gekozen_budgethouder = (
+        form.budgethouder.data
+        or request.form.get("budgethouder")
+        or meta.get("budgethouder")
+    )
+
+    # -------------------------
+    # kostenplaatsen (blijft zoals je had)
+    # -------------------------
+    kostenplaatsen = BUDGETHOUDERS.get(gekozen_budgethouder, [])
+
+    form.kostenplaatsen.choices = [("", "-- kies --")] + [
+        (k, k) for k in kostenplaatsen
+    ]
+
+    # -------------------------
+    # 🔥 LOCATIES DYNAMISCH
+    # -------------------------
+    locaties = BUDGETHOUDER_LOCATIES.get(gekozen_budgethouder, [])
+
+    form.locatie.choices = [("", "--kies--")] + [
+        (l, l) for l in locaties
+    ]
+
+    # -------------------------
+    # GET → vullen
+    # -------------------------
+    if request.method == "GET":
+        form.process(data=meta)
+
+    # -------------------------
+    # POST → opslaan
+    # -------------------------
+    if request.method == "POST":
+
+        if "opslaan" in request.form:
+
+            if form.validate():
+
+                data["meta"] = {
+                    "naam_opdracht": form.naam_opdracht.data,
+                    "budgethouder": form.budgethouder.data,
+                    "kostenplaats": form.kostenplaatsen.data,
+                    "wat_opdracht": form.wat_opdracht.data,
+                    "datum_binnenkomst": form.datum_binnenkomst.data,
+                    "deadline": form.deadline.data,
+                    "locatie": form.locatie.data,
+                    "opdrachtnummer": form.opdrachtnummer.data,
+                    "telefoonnummer": form.telefoonnummer.data,
+                    "email": form.email.data,
+                    "contactpersoon": form.contactpersoon.data,
+                    "levering": form.levering.data,
+                    "adres": form.adres.data
+                }
+
+                session.modified = True
+                return redirect(url_for("producten"))
+
+        flash("Controleer de invoer.", "warning")
+
     return render_template("meta.html", form=form)
 
 @app.route("/producten", methods=["GET", "POST"])
@@ -581,7 +881,6 @@ def meta():
 def producten():
     data = get_data()
 
-    # INIT
     if "items" not in data or not data["items"]:
         data["items"] = [{
             "naam": "",
@@ -595,10 +894,8 @@ def producten():
 
     items = data["items"]
 
-    # ---------------- POST ----------------
     if request.method == "POST":
 
-        # 1 product toevoegen
         if "add_product" in request.form:
             items.append({
                 "naam": "",
@@ -609,14 +906,16 @@ def producten():
                 "subcategorie": "",
                 "bewerking": ""
             })
+            session.modified = True
+            return redirect(url_for("producten"))
 
-        # verwijderen per card
         elif "remove_product" in request.form:
             idx = int(request.form["remove_product"])
             if 0 <= idx < len(items):
                 items.pop(idx)
+                session.modified = True
+            return redirect(url_for("producten"))
 
-        # opslaan → DATABASE
         elif "save" in request.form:
 
             nieuwe_items = []
@@ -634,10 +933,12 @@ def producten():
             data["items"] = nieuwe_items
             session.modified = True
 
+            enriched_items = enrich_items(nieuwe_items, data.get("meta", {}))
+
             wb = Werkbrief(
                 datum=datetime.now().strftime("%Y-%m-%d %H:%M"),
                 meta=data.get("meta", {}),
-                items=nieuwe_items
+                items=enriched_items
             )
 
             db.session.add(wb)
@@ -645,43 +946,11 @@ def producten():
 
             return redirect(url_for("werkbrieven"))
 
-    # ---------------- GET ----------------
     form = ProductListForm()
+    form.producten.entries = []
 
     for item in items:
         form.producten.append_entry(item)
-
-    alle_namen = sorted({k[0] for k in PRIJZEN})
-
-    for p in form.producten.entries:
-        naam = p.form.naam.data or ""
-        formaat = p.form.formaat.data or ""
-        gram = p.form.gram.data or ""
-
-        p.form.naam.choices = [("", "-- kies --")] + [(n, n) for n in alle_namen]
-
-        p.form.formaat.choices = [("", "-- kies --")] + [
-            (f, f) for f in sorted({k[1] for k in PRIJZEN if not naam or k[0] == naam})
-        ]
-
-        p.form.gram.choices = [("", "-- kies --")] + [
-            (g, g) for g in sorted({
-                k[2] for k in PRIJZEN
-                if (not naam or k[0] == naam)
-                and (not formaat or k[1] == formaat)
-                and k[2]
-            })
-        ]
-
-        p.form.zijde.choices = [("", "-- kies --")] + [
-            (z, z) for z in sorted({
-                k[3] for k in PRIJZEN
-                if (not naam or k[0] == naam)
-                and (not formaat or k[1] == formaat)
-                and (not gram or k[2] == gram)
-                and k[3]
-            })
-        ]
 
     return render_template("producten.html", form=form)
 
@@ -690,22 +959,9 @@ def producten():
 def werkbrief():
     data = get_data()
 
-    items_met_prijs = []
+    items = data.get("items", [])
 
-    if "items" not in data:
-        data["items"] = []
-    
-    items_met_prijs = []
-
-    for item in data.get("items", []):
-        item_copy = item.copy()
-
-        item_copy["prijs_per_stuk"] = prijs_per_stuk(item)
-        item_copy["prijs"] = item_copy["prijs_per_stuk"] * int(item.get("aantal", 1))
-
-        items_met_prijs.append(item_copy)
-
-    totaal = sum(i["prijs"] for i in items_met_prijs)
+    items_met_prijs, totaal = bereken_items(items)
 
     meta_clean = {k: v for k, v in data.get("meta", {}).items() if k != "csrf_token"}
 
@@ -725,8 +981,7 @@ def no_cache(response):
 
 
 
-
 if __name__ == "__main__":
-     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
   

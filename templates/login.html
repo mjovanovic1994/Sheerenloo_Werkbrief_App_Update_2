@@ -8,7 +8,9 @@
             <div class="card-body">
                 <h3 class="card-title mb-4">Inloggen</h3>
                 <form method="POST">
-                    {{ form.csrf_token }}
+                    {% if form %}
+                       {{ form.hidden_tag() }}
+                    {% endif %} 
                     <div class="mb-3">
                         {{ form.username.label(class="form-label") }}
                         {{ form.username(class="form-control", placeholder="Gebruikersnaam") }}

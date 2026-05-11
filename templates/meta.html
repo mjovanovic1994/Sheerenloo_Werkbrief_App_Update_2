@@ -10,8 +10,7 @@
     <div class="card-body">
 
         <form method="POST">
-            {{ form.csrf_token }}
-
+                    {{ form.hidden_tag() }}         
             <div class="row">
                 <div class="col-md-6 mb-3">
                     {{ form.naam_opdracht.label(class="form-label") }}
@@ -19,9 +18,12 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    {{ form.budgethouder.label(class="form-label") }}
-                    {{ form.budgethouder(class="form-control") }}
-                </div>
+    {{ form.budgethouder.label(class="form-label") }}
+    {{ form.budgethouder(
+    class="form-select",
+    onchange="this.form.submit()"
+) }}
+</div>
             </div>
 
             <div class="mb-3">
@@ -53,8 +55,8 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    {{ form.kostenplaats.label(class="form-label") }}
-                    {{ form.kostenplaats(class="form-control") }}
+                    {{ form.kostenplaatsen.label(class="form-label") }}
+{{ form.kostenplaatsen(class="form-select") }}
                 </div>
             </div>
 
@@ -86,7 +88,7 @@
     {{ form.adres(class="form-control") }}
 </div>
 
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" name="opslaan" class="btn btn-primary w-100">
                 Opslaan & Volgende
             </button>
 
