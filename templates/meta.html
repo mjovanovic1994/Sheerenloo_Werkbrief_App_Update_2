@@ -18,11 +18,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-    {{ form.budgethouder.label(class="form-label") }}
-    {{ form.budgethouder(
-    class="form-select",
-    onchange="this.form.submit()"
-) }}
+ {{ form.budgethouder(class="form-select", id="budgethouder") }}
 </div>
             </div>
 
@@ -45,7 +41,7 @@
 
             <div class="mb-3">
                 {{ form.locatie.label(class="form-label") }}
-                {{ form.locatie(class="form-control") }}
+                {{ form.locatie(class="form-select", id="locatie") }}
             </div>
 
             <div class="row">
@@ -55,8 +51,8 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    {{ form.kostenplaatsen.label(class="form-label") }}
-{{ form.kostenplaatsen(class="form-select") }}
+                    {{ form.kostenplaats.label(class="form-label") }}
+{{ form.kostenplaats(class="form-select", id="kostenplaats") }}
                 </div>
             </div>
 
@@ -96,5 +92,89 @@
 
     </div>
 </div>
+<script>
+const mapping = JSON.parse('{{ locatie_kostenplaats | tojson }}');
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const locatieSelect = document.getElementById("locatie");
+    const kostenplaatsSelect = document.getElementById("kostenplaats");
+
+    function updateKostenplaats() {
+        const locatie = locatieSelect.value;
+        const kp = mapping[locatie];
+
+        kostenplaatsSelect.innerHTML = "";
+
+        const empty = document.createElement("option");
+        empty.value = "";
+        empty.text = "-- kies --";
+        kostenplaatsSelect.appendChild(empty);
+
+        if (kp) {
+            const option = document.createElement("option");
+            option.value = kp;
+            option.text = kp;
+            option.selected = true;
+            kostenplaatsSelect.appendChild(option);
+        }
+    }
+
+    locatieSelect.addEventListener("change", updateKostenplaats);
+
+    updateKostenplaats();
+});
+const budgethouderLocaties = JSON.parse('{{ budgethouder_locaties | tojson | safe }}');
+const locatieKostenplaats = JSON.parse('{{ locatie_kostenplaats | tojson | safe }}');
+
+const budgethouderSelect = document.getElementById("budgethouder");
+const locatieSelect = document.getElementById("locatie");
+const kostenplaatsSelect = document.getElementById("kostenplaats");
+
+// -------------------------
+// 1. UPDATE LOCATIES
+// -------------------------
+function updateLocaties() {
+    const bh = budgethouderSelect.value;
+    const locaties = budgethouderLocaties[bh] || [];
+
+    locatieSelect.innerHTML = `<option value="">-- kies --</option>`;
+
+    locaties.forEach(loc => {
+        const opt = document.createElement("option");
+        opt.value = loc;
+        opt.text = loc;
+        locatieSelect.appendChild(opt);
+    });
+
+    updateKostenplaats(); // reset cascade
+}
+// -------------------------
+// 2. UPDATE KOSTENPLAATS
+// -------------------------
+function updateKostenplaats() {
+    const loc = locatieSelect.value;
+    const kp = locatieKostenplaats[loc];
+
+    kostenplaatsSelect.innerHTML = `<option value="">-- kies --</option>`;
+
+    if (kp) {
+        const opt = document.createElement("option");
+        opt.value = kp;
+        opt.text = kp;
+        opt.selected = true;
+        kostenplaatsSelect.appendChild(opt);
+    }
+}
+
+// -------------------------
+// EVENTS
+// -------------------------
+budgethouderSelect.addEventListener("change", updateLocaties);
+locatieSelect.addEventListener("change", updateKostenplaats);
+
+// init
+updateLocaties();
+</script>
 
 {% endblock %}

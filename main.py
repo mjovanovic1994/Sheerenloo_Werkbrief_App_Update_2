@@ -51,6 +51,8 @@ class Werkbrief(db.Model):
 
 logging.basicConfig(level=logging.INFO)
 
+STANDAARDTARIEF = 1.00
+
 KOSTENPLAATSEN = [
     "20867", "20393", "23215", "20863", "20852",
     "20856", "20855", "23820", "20854", "23780",
@@ -243,7 +245,7 @@ BUDGETHOUDER_LOCATIES = {
         "Elsenhoek", "Molenweg 24"
     ],
     "Kristel van Ommeren": [
-        "Bureau VOOR", "Eekhoornstraat 9", "Hagedisstraat 7-11"
+        "Bureau VOOR", "Eekhoornstraat 9", "Hagedisstraat 7-11","Nachtzorg"
     ],
     "Hester de Graaf": [
         "OR", "Duurzaamheid", "Communicatie", "Recruitment",
@@ -272,7 +274,12 @@ BUDGETHOUDER_LOCATIES = {
     ],
     "Elly Westerdijk": [
         "Academie"
+    ],
+
+    "Gerdy van Achterberg":[
+        "Pastoraat"
     ]
+    
 }
 
 BUDGETHOUDERS = {
@@ -291,7 +298,7 @@ BUDGETHOUDERS = {
     ],
 
     "Kristel van Ommeren": [
-        "21759", "20754", "5381"
+        "21759", "20754", "5381", "20764"
     ],
 
     "Hester de Graaf": [
@@ -328,9 +335,63 @@ BUDGETHOUDERS = {
 
     "Elly Westerdijk": [
         "10545"
+    ],
+
+    "Gerdy van Achterberg":[
+        "15408"
     ]
 }
-# ---------------- FUNCTIES ----------------
+
+LOCATIE_KOSTENPLAATS = {
+    "Proosdij": "20867",
+    "Het Hart": "20393",
+    "Buitendienst": "23215",
+    "Bakkerij Smul": "20863",
+    "Rotonde": "20852",
+    "Makandra": "20856",
+    "Voetbalwerkplaats": "20855",
+    "Academie voor Zelfstandigheid": "23820",
+    "Jobcoach": "20854",
+    "Vrijwillige inzet": "23780",
+    "Theehuis de Roek": "20788",
+    "Recreatie": "20727",
+
+    "Rietkampen": "20869",
+    "DAC. Rietkampen": "20783",
+    "Wasserij": "22322",
+
+    "Elsenhoek": "20864",
+    "Molenweg 24": "20823",
+
+    "Bureau VOOR": "21759",
+    "Eekhoornstraat 9": "20754",
+    "Hagedisstraat 7-11": "5381",
+    "Nachtzorg": "20764",
+
+    "OR": "23267",
+    "Duurzaamheid": "20570",
+
+    "Het Panorama": "23859",
+
+    "Hagedisstraat 8": "22726",
+
+    "Kasgroep": "23222",
+
+    "Visitekaartjes": "49240",
+
+    "Erasmusstate 81-83": "20839",
+
+    "EMB": "20837",
+    "Onder 1 Dak": "23814",
+
+    "Opleiding": "90205",
+
+    "Academie": "10545",
+
+    "Pastoraat": "15408",
+
+}
+# ---------------- FUNCTIES --------------
 
 def save_werkbrief_db(data):
     enriched_items = enrich_items(
@@ -375,47 +436,99 @@ def get_valid_values(field, current_filters):
 
     return sorted(values)
 
+def build_price_keys(item):
+    """
+    Genereert fallback keys van specifiek → generiek
+    """
+    naam = norm(item.get("naam"))
+    formaat = norm(item.get("formaat"))
+    gram = norm(item.get("gram"))
+    zijde = norm(item.get("zijde"))
+    sub = norm(item.get("subcategorie"))
+
+    keys = []
+
+    # meest specifiek
+    keys.append((naam, formaat, gram, zijde))
+    keys.append((naam, formaat, "", zijde))
+    keys.append((naam, formaat, "", ""))
+
+    # subcategorie fallback (voor o.a. Bewerking / Inbinden / Extra)
+    if sub:
+        keys.append((naam, sub, "", ""))
+        keys.append((sub, "", "", ""))
+
+    # laatste fallback
+    keys.append((naam, "", "", ""))
+
+    return keys
+
+
 def prijs_per_stuk(item, meta=None):
-    naam = item.get("naam", "")
-    formaat = item.get("formaat", "")
-    gram = item.get("gram") or ""   # 👈 FIX
-    zijde = item.get("zijde", "")
-    sub = item.get("subcategorie", "")
 
-    # 1. exacte match
-    prijs = PRIJZEN.get((naam, formaat, gram, zijde))
-    if prijs is not None:
-        base = prijs
-    else:
-        # 2. fallback zonder gram
-        prijs = PRIJZEN.get((naam, formaat, "", zijde))
-        if prijs is not None:
-            base = prijs
+    naam = norm(item.get("naam"))
+    sub = norm(item.get("subcategorie"))
+    formaat = norm(item.get("formaat"))
+    gram = norm(item.get("gram"))
+    zijde = norm(item.get("zijde"))
+
+    # =========================
+    # ETIKETTEN SPECIAL CASE
+    # =========================
+    if naam == "Etiketten":
+
+        if sub == "24 per vel":
+            base = PRIJZEN.get(("Etiketten", "24 per vel", "", ""), 0)
+
+        elif sub == "8 per vel":
+            base = PRIJZEN.get(("Etiketten", "8 per vel", "", ""), 0)
+
         else:
-            # 3. subcategorie fallback
-            prijs = PRIJZEN.get((naam, sub, "", ""))
-            if prijs is not None:
-                base = prijs
-            else:
-                base = 0.0
+            base = 0
 
-    multiplier = 1.0
+        multiplier = 1.0
 
-    if base == 0:
-        print("❌ NO PRICE MATCH:", naam, formaat, gram, zijde, sub)
+        if meta:
+            multiplier = PRIJSAANPASSING.get(
+                (
+                    meta.get("budgethouder"),
+                    meta.get("locatie"),
+                    meta.get("kostenplaats")
+                ),
+                1.0
+            )
 
-    if meta:
-        key = (
-            meta.get("budgethouder"),
-            meta.get("locatie"),
-            meta.get("kostenplaats")
-        )
-        multiplier = PRIJSAANPASSING.get(key, 1.0)
+        return round(base * multiplier, 2)
 
-    return base * multiplier
+    # =========================
+    # GENERIEKE PRIJZEN
+    # =========================
+    for key, price in PRIJZEN.items():
+
+        match = True
+
+        for i, val in enumerate(key):
+            if val and val != [
+                naam, formaat, gram, zijde
+            ][i]:
+                match = False
+                break
+
+        if match:
+            return price
+
+    # =========================
+    # FALLBACK (BELANGRIJK!)
+    # =========================
+    return 0.0
 
 def totaal_prijs(items):
-    return sum(prijs_per_stuk(i) * int(i.get('aantal',1)) for i in items)
+    totaal_items = sum(
+        prijs_per_stuk(i) * int(i.get('aantal', 1))
+        for i in items
+    )
+
+    return round(totaal_items + STANDAARDTARIEF, 2)
 
 def get_data():
     if "data" not in session:
@@ -439,7 +552,10 @@ def get_subcategorieen(categorie):
 
 def bereken_items(items, meta=None):
     enriched = enrich_items(items, meta)
+
     totaal = sum(i["prijs"] for i in enriched)
+    totaal = round(totaal + STANDAARDTARIEF, 2)
+
     return enriched, totaal
 
 def validate(self):
@@ -455,23 +571,78 @@ def validate(self):
     return True
 
 def enrich_items(items, meta=None):
-    """Voegt prijs_per_stuk en totaal toe aan items"""
     resultaat = []
 
     for item in items:
-        item_copy = dict(item)
+        item = dict(item)
 
-        aantal = max(1, int(item_copy.get("aantal") or 1))
-        prijs_stuk = prijs_per_stuk(item_copy, meta)
-        totaal = prijs_stuk * aantal
+        aantal = int(item.get("aantal") or 1)
+        if aantal < 1:
+            aantal = 1
 
-        item_copy["aantal"] = aantal
-        item_copy["prijs_per_stuk"] = prijs_stuk
-        item_copy["prijs"] = totaal
+        prijs_stuk = round(prijs_per_stuk(item, meta), 2)
+        totaal = round(prijs_stuk * aantal, 2)
 
-        resultaat.append(item_copy)
+        item.update({
+            "aantal": aantal,
+            "prijs_per_stuk": prijs_stuk,
+            "prijs": totaal
+        })
 
-    return resultaat
+        resultaat.append(item)
+
+    return resultaat 
+
+def norm(value):
+    if value is None:
+        return ""
+    return str(value).strip()
+
+def build_price_key(item):
+    naam = norm(item.get("naam"))
+    sub = norm(item.get("subcategorie"))
+    bewerking = norm(item.get("bewerking"))
+    formaat = norm(item.get("formaat"))
+    gram = norm(item.get("gram"))
+    zijde = norm(item.get("zijde"))
+
+    # Lamineren via bewerking ondersteunen
+    if bewerking == "Lamineren":
+        naam = "Lamineren"
+
+    keys = [
+
+        # Exacte match
+        (naam, formaat, gram, zijde),
+
+        # Zonder zijde
+        (naam, formaat, gram, ""),
+
+        # Subcategorie producten
+        (naam, sub, "", ""),
+
+        # Bewerkingen
+        (naam, bewerking, "", ""),
+
+        # Algemene fallback
+        (naam, "", "", "")
+    ]
+
+    return keys
+
+def get_kostenplaats_options(budgethouder, locatie):
+    """
+    Geeft lijst kostenplaatsen op basis van budgethouder + locatie
+    """
+
+    # 1. fallback: via LOCATIE_KOSTENPLAATS
+    kp = LOCATIE_KOSTENPLAATS.get(locatie)
+
+    if kp:
+        return [kp]
+
+    # 2. fallback: via BUDGETHOUDERS mapping
+    return BUDGETHOUDERS.get(budgethouder, [])
 
 # ---------------- FORMS ----------------
 class LoginForm(FlaskForm):
@@ -488,54 +659,19 @@ class MetaForm(FlaskForm):
     ],
     validators=[Optional()]
 )
-    kostenplaatsen = SelectField(
-    "Kostenplaats",
-    choices=[],
-    validators=[Optional()]
+    kostenplaats = SelectField(
+        "Kostenplaats",
+        choices=[],
+        validators=[Optional()]
     )
     wat_opdracht = TextAreaField("Wat is de opdracht", validators=[DataRequired()])
     datum_binnenkomst = StringField("Datum binnenkomst")
-    locatie = SelectField("Locatie", choices=[
-        ("","--kies--"),
-        ("Proosdij","Proosdij"),
-        ("Het Hart", "Het Hart"),
-        ("Buitendienst","Buitendienst"),
-        ("Bakkerij Smul","Bakkerij Smul"),
-        ("Rotonde","Rotonde"),
-        ("Makandra","Makdandra"),
-        ("Voetbalwerkplaats","Voetbalwerkplaats"),
-        ("Academie voor Zelfstandigheid", "Academie voor Zelfstandigheid"),
-        ("Jobcoach","Jobcoach"),
-    ("Vrijwillige inzet", "Vrijwillige inzet"),
-    ("Theehuis de Roek", "Theehuis de Roek"),
-    ("Recreatie","Recreatie"),
-    ("Innovatie","Innovatie"),
-    ("Rietkampen","Rietkampen"),
-    ("D.A.C. Rietkampen","D.A.C. Rietkampen"),
-    ("Wasserij","Wasserij"),
-    ("Buitenland (Parkboerderij)","Buitenland (Parkboerderij)"),
-    ("Elsenhoek","Elsenhoek"),
-    ("Molenweg 24","Molenweg 24"),
-    ("Burea VOOR","Bureau VOOR"),
-    ("Eekhoornstraat 9","Eekhoornstraat 9"),
-    ("Hagedisstraat 7-11","Hagedisstraat 7-11"),
-    ("OR","OR"),
-    ("Duurzaamheid","Duurzaamheid"),
-    ("Communicatie","Communicatie"),
-    ("Recruitement","Recruitement"),
-    ("Secretariaat Management","Secretariaat Management"),
-    ("Gelderland Midden","Gelderland Midden"),
-    ("Wilma Fontaine","Wilma Fontaine"),
-    ("Het Panorama","Het Panorama"),
-    ("Hagedisstraat 8","Hagedisstraat 8"),
-    ("Kasgroep", "Kasgroep"),
-    ("Visitekaartjes", "Visitekaartjes"),
-    ("Erasmusstate 81-83","Erasmusstate 81-83"),
-    ("EMB","EMB"),
-    ("Onder 1 Dak","Onder 1 Dak"),
-    ("Opleiding","Opleiding"),
-    ("Academie","Academie")
-    ],validators=[Optional()])
+   
+    locatie = SelectField(
+        "Locatie",
+        choices=[],
+        validators=[Optional()]
+    )
     deadline = StringField("Deadline")
     opdrachtnummer = StringField("Opdrachtnummer")
     telefoonnummer = StringField("Telefoonnummer")
@@ -670,7 +806,8 @@ class ProductForm(FlaskForm):
         ("Mailing","Mailing"),
         ("Extra flyer","Extra flyer"),
         ("Postzegel","Postzegel"),
-        ("Envelop A5","Envelop A5")
+        ("Envelop A5","Envelop A5"),
+        ("Vrijwilligers kaarten","Vrijwilligers kaarten")
     
     
     ])
@@ -679,10 +816,9 @@ class ProductForm(FlaskForm):
         ("Snijden", "Snijden"),
         ("Vouwen", "Vouwen"),
         ("Nieten", "Nieten"),
-        ("Lamineren", "Lamineren"),
         ("Inbinden", "Inbinden"),
         ("Rapen", "Rapen"),
-        ("Performeren", "Performeren"),
+        ("Perforeren", "Perforeren"),
         ("Versturen", "Versturen"),
         ("Rillen", "Rillen")
     ])
@@ -724,7 +860,7 @@ def werkbrief_pdf(wb_id):
 
     items_met_prijs, totaal = bereken_items(wb.items, wb.meta)
 
-    print(wb.items[0])
+    
 
     rendered = render_template(
         "werkbrief.html",
@@ -747,8 +883,7 @@ def werkbrieven():
     werkbrieven = Werkbrief.query.order_by(Werkbrief.id.desc()).all()
     form = DeleteForm()
     for wb in werkbrieven:
-        wb.items, _ = bereken_items(wb.items, wb.meta)
-        print(wb.items[0])
+        wb.items, _ = bereken_items(wb.items, wb.meta or {})
     return render_template("werkbrieven.html", werkbrieven=werkbrieven, form=form)
 
 @app.route("/werkbrief/<int:wb_id>")
@@ -756,12 +891,14 @@ def werkbrieven():
 def werkbrief_detail(wb_id):
     wb = Werkbrief.query.get(wb_id)
 
+    data = get_data()
+    items = data.get("items", [])
+
     if not wb:
         flash("Werkbrief niet gevonden", "danger")
         return redirect(url_for("werkbrieven"))
 
-    items_met_prijs, totaal = bereken_items(wb.items, wb.meta)
-    print(wb.items[0])
+    items_met_prijs, totaal = bereken_items(items, data.get("meta", {}))
 
     return render_template(
         "werkbrief.html",
@@ -808,73 +945,98 @@ def logout():
 def meta():
 
     data = get_data()
-    form = MetaForm()
-    meta = data.get("meta", {})
+    saved_meta = data.get("meta", {})
 
-    # -------------------------
-    # budgethouder bepalen
-    # -------------------------
-    gekozen_budgethouder = (
-        form.budgethouder.data
-        or request.form.get("budgethouder")
-        or meta.get("budgethouder")
+    form = MetaForm()
+
+    # =========================
+    # HUIDIGE DATA
+    # =========================
+    source = request.form if request.method == "POST" else saved_meta
+
+    selected_locatie = source.get("locatie", "")
+
+    # =========================
+    # LOCATIES
+    # =========================
+    locaties = sorted(LOCATIE_KOSTENPLAATS.keys())
+
+    form.locatie.choices = [
+        ("", "-- kies --")
+    ] + [
+        (locatie, locatie)
+        for locatie in locaties
+    ]
+
+    # =========================
+    # KOSTENPLAATS AUTOMATISCH
+    # =========================
+    gekoppelde_kostenplaats = LOCATIE_KOSTENPLAATS.get(
+        selected_locatie,
+        ""
     )
 
-    # -------------------------
-    # kostenplaatsen (blijft zoals je had)
-    # -------------------------
-    kostenplaatsen = BUDGETHOUDERS.get(gekozen_budgethouder, [])
-
-    form.kostenplaatsen.choices = [("", "-- kies --")] + [
-        (k, k) for k in kostenplaatsen
+    form.kostenplaats.choices = [
+        ("", "-- kies --")
     ]
 
-    # -------------------------
-    # 🔥 LOCATIES DYNAMISCH
-    # -------------------------
-    locaties = BUDGETHOUDER_LOCATIES.get(gekozen_budgethouder, [])
+    if gekoppelde_kostenplaats:
+        form.kostenplaats.choices.append(
+            (
+                gekoppelde_kostenplaats,
+                gekoppelde_kostenplaats
+            )
+        )
 
-    form.locatie.choices = [("", "--kies--")] + [
-        (l, l) for l in locaties
-    ]
+    # =========================
+    # FORM DATA
+    # =========================
+    form.process(
+        formdata=request.form if request.method == "POST" else None,
+        data={
+            **saved_meta,
+            "locatie": selected_locatie,
+            "kostenplaats": gekoppelde_kostenplaats
+        }
+    )
 
-    # -------------------------
-    # GET → vullen
-    # -------------------------
-    if request.method == "GET":
-        form.process(data=meta)
+    # =========================
+    # OPSLAAN
+    # =========================
+    if request.method == "POST" and "opslaan" in request.form:
 
-    # -------------------------
-    # POST → opslaan
-    # -------------------------
-    if request.method == "POST":
+        if form.validate_on_submit():
 
-        if "opslaan" in request.form:
+            data["meta"] = {
+                "naam_opdracht": form.naam_opdracht.data,
+                "locatie": form.locatie.data,
+                "kostenplaats": form.kostenplaats.data,
+                "wat_opdracht": form.wat_opdracht.data,
+                "datum_binnenkomst": form.datum_binnenkomst.data,
+                "deadline": form.deadline.data,
+                "opdrachtnummer": form.opdrachtnummer.data,
+                "telefoonnummer": form.telefoonnummer.data,
+                "email": form.email.data,
+                "contactpersoon": form.contactpersoon.data,
+                "levering": form.levering.data,
+                "adres": form.adres.data
+            }
 
-            if form.validate():
+            session["data"] = data
+            session.modified = True
 
-                data["meta"] = {
-                    "naam_opdracht": form.naam_opdracht.data,
-                    "budgethouder": form.budgethouder.data,
-                    "kostenplaats": form.kostenplaatsen.data,
-                    "wat_opdracht": form.wat_opdracht.data,
-                    "datum_binnenkomst": form.datum_binnenkomst.data,
-                    "deadline": form.deadline.data,
-                    "locatie": form.locatie.data,
-                    "opdrachtnummer": form.opdrachtnummer.data,
-                    "telefoonnummer": form.telefoonnummer.data,
-                    "email": form.email.data,
-                    "contactpersoon": form.contactpersoon.data,
-                    "levering": form.levering.data,
-                    "adres": form.adres.data
-                }
+            flash("Werkbrief opgeslagen", "success")
 
-                session.modified = True
-                return redirect(url_for("producten"))
+            return redirect(url_for("producten"))
 
-        flash("Controleer de invoer.", "warning")
+        flash("Controleer de invoer", "warning")
 
-    return render_template("meta.html", form=form)
+    return render_template(
+        "meta.html",
+        form=form,
+        budgethouder_locaties=BUDGETHOUDER_LOCATIES,
+        locatie_kostenplaats=LOCATIE_KOSTENPLAATS
+    )
 
 @app.route("/producten", methods=["GET", "POST"])
 @login_required
@@ -920,14 +1082,21 @@ def producten():
 
             nieuwe_items = []
             for p in ProductListForm(request.form).producten.entries:
+                naam = p.form.naam.data
+                bewerking = p.form.bewerking.data
+                sub = p.form.subcategorie.data
+                if bewerking and not naam:
+                    naam = "Bewerking"
+                if bewerking == "Inbinden":
+                    naam = "Inbinden"
                 nieuwe_items.append({
-                    "naam": p.form.naam.data,
+                    "naam": naam,
                     "formaat": p.form.formaat.data,
                     "gram": p.form.gram.data,
                     "zijde": p.form.zijde.data,
                     "aantal": max(1, int(p.form.aantal.data or 1)),
-                    "subcategorie": p.form.subcategorie.data,
-                    "bewerking": p.form.bewerking.data
+                    "subcategorie": sub,
+                    "bewerking": bewerking
                 })
 
             data["items"] = nieuwe_items
@@ -980,8 +1149,9 @@ def no_cache(response):
     return response
 
 
-
 if __name__ == "__main__":
+     with app.app_context():
+        db.create_all()
      app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
   
